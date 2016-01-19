@@ -1,24 +1,13 @@
 getwd()
-
-## test edit MAC Jan5th 1
-## test edit MAC Jan7th 1
-<<<<<<< HEAD
-## Sudy edit Jan 7 2016
-#  Hi Sudy
-=======
-##Sudy edit Jan 7 2016
-# Hi Sudy
-#THIS IS ME
->>>>>>> 41eeb170836276c94152896a141520a63634e131
-
-setwd("C:/Users/Sudy/Desktop/QT2/")
+setwd("/Users/Sudy/Desktop/QT2/Analysis")
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 options(digits=3)
+library(lme4)
 library(reshape2)
 library(dplyr)
 library(ggplot2)
 library(agricolae)
-
+library(plyr)
 attach(qtsot)
 names(qtsot)
 dim(qtsot)
@@ -27,10 +16,14 @@ length(subj)  #good. 204
 nSubjs = c(1:204)
 qt  <-  data.frame(subj=nSubjs) # making a dataframe
 
+glmer1 <- glmer(dec ~ avgbot + path + req + ( product | subj), data=qtsot, family=binomial)
+
 # bring in all the variables from the csv into a neat df
 qt$re      <- as.factor (qtsot$re)
 qt$req     <- as.numeric(qtsot$req)
 qt$dec     <- as.factor (qtsot$dec)
+t.test(req,macbot)
+t.test(macbot,luisbot)
 qt$product <- as.factor (qtsot$product)
 qt$endow   <- as.factor (qtsot$path)
 qt$macbot  <- as.numeric(qtsot$macbot)
@@ -48,7 +41,7 @@ qt$smrd <- as.numeric(qtsot$smrd)       #SUDY - adding original SMRD
 #qt$gender  <- as.factor (qtsot$gender)
 #qt$age     <- as.factor (qtsot$age)
 #qt$aspect  <- as.numeric(qtsot$aspect)
-qt$sot <- as.numeric(qtsot$sot) #adding standardized and averaged avgbot & avgsmrd
+qt$rmsot <- as.numeric(qtsot$rmsot) #adding standardized and averaged avgbot & avgsmrd
 
 
 ?str
@@ -86,7 +79,7 @@ str(dec)        # want to rename these levels to took and left
 #qt$dec[qt$dec==1] <- "Take" #SUDY remnamed decision
 #qt$dec[qt$dec==0] <- "Left" #SUDY remnamed decision
 
-str(endow)      # want to rename these levels to endowed and unendowed
+str(endow) # want to rename these levels to endowed and unendowed
 #qt$endow  <- as.numeric (qtsot$endow)  
 #qt$endow[qt$endow==0] <- "Endowed" 
 #qt$endow[qt$endow==NA] <- "0"
@@ -103,20 +96,29 @@ levels(product)  <- c("Shampoo", "Ice Cream")   # need to check that this is the
 levels(endow)    <- c("endowed", "unendowed")   # need to check that this is the order
 ?levels
 
-# scale the continuous variables: macbot, req, avgbot, avgsmrd
+#Comparing histogram distributions of SMRD/BOT/SOT RF vs. QT
+# scale the continuous variables: bot and smrd to make original SOT
 #qt$req.z    <- scale(qt$req)
 #qt$macbot.z <- scale(qt$macbot)  
 #qt$luisbot.z<-scale(qt$luisbot)
-#qt$avgbot.z <- scale(qt$avgbot)
-#qt$avgsmrd.z <- scale(qt$avgsmrd)
+qt$bot.z <- scale(qt$bot)
+qt$smrd.z <- scale(qt$smrd)
+qt$qtsot <- ((qt$bot.z + qt$smrd.z)/2) #creating Query Theory SOT score
+qt$qtsot <- as.numeric(qt$qtsot)
 #qt$avgpp.z <- scale(qt$avgpp)
-
-mean(qt$avgbot)
-sd(qt$avgbot)
-mean(qt$avgsmrd)
-sd(qt$avgsmrd)
-summary(qt$sot)
-boxplot(qt$sot)
+hist(qt$avgsmrd, main="Histogram of Regulatory Focus SMRD",xlab="SMRD")
+hist(qt$smrd, main="Histogram of Query Theory SMRD",xlab="SMRD")
+hist(qt$avgbot, main="Histogram of Regulatory Focus BOT",xlab="BOT", ylim=c(0,80))
+axis(side=1, at=seq(-8,8))
+axis(side=2, at=seq(0,0))
+hist(qt$bot, main="Histogram of Query Theory BOT",xlab="BOT", ylim=c(0,80))
+axis(side=1, at=seq(-8,8))
+axis(side=2, at=seq(0,0))
+hist(qt$rmsot, main="Histogram of Regulatory Focus SOT",xlab="SOT", xlim=c(-3,3), ylim=c(0,60))
+hist(qt$qtsot, main="Histogram of Query Theory SOT",xlab="SOT", xlim=c(-3,3), ylim=c(0,60))
+cor(qt$avgsmrd,qt$smrd) #0.273
+cor(qt$avgbot,qt$bot) #0.572
+cor(qt$rmsot,qt$qtsot) #0.448
 
 ###Creating RE, URE dataframe
 RE<-qt %>% filter(re == "1")
@@ -124,8 +126,8 @@ summary(RE) #avgbot = .02
 sd(RE$avgbot) #2.34
 mean(RE$avgsmrd) #avgsmrd = .121
 sd(RE$avgsmrd) #avgsmrd = .83
-mean(RE$sot) #-.135
-sd(RE$sot) #.842
+mean(RE$rmsot) #-.135
+sd(RE$rmsot) #.842
 URE<-qt %>% filter(re == "0")
 sd(URE$avgbot) #2.21
 summary(URE) #avgbot=.84
@@ -247,32 +249,7 @@ t.test(icEURE$sot, icUEURE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p.008
 chisq.test(icUEURE$avgbot, icEURE$avgbot) #Doesn't work?!
 boxplot(icUEURE$avgbot, icEURE$avgbot)
 
-#Need a bargraph of Ice Cream SOT where y-axis show average SOT (with std dev lines) and x-axis is endowed RE, unendowed RE, etc
-#Before I can do a good bargraph for this data, I need you to create a new variable.
-
-qt$newvariable <- 1 # this just creates the column and sets them all to 1.
-qt$newvariable[qt$re=="1" & qt$endow=="0"]<- "RE endowed" 
-qt$newvariable[qt$re=="1" & qt$endow=="1"] <- "RE unendowed"
-qt$newvariable[qt$re=="0" & qt$endow=="0"]    <- "URE endowed"
-qt$newvariable[qt$re=="0" & qt$endow=="1"]  <- "URE unendowed"
-
-qt$newvariable <- as.factor(qt$newvariable)
-str(qt$newvariable)  # this should return “Factor w/ 4 levels: “uRE endowed”…
-ggplot(data=qt, aes(newvariable,sot)) + 
-  geom_point() + 
-  stat_smooth(method='glm', family='binomial') + 
-  labs(title='Regression of SOT Score on Product Decision') + 
-  xlab('Eater Type x Endowment') + 
-  ylab('Mean SOT')
-then we can put that in the X of a ggplot.
-
-(sorry if this exists somewhere else.  I am a little disoriented by this dataset because I don’t work with it enough)  
-
-  Endowed   Unendowed
-RE
-URE
-icSOT <- table(icEURE$sot, icUEURE$sot,icERE$sot, icUERE$sot) #Error: all arguments must have the same length
-
+boxplot(icERE$avgbot, icUERE$avgbot)
 
 
 #Creating Shampoo Endowed and Unendowed RE
@@ -314,8 +291,31 @@ t.test(sEURE$sot, sUEURE$sot, conf=0.95,var.equal=FALSE, paired=FALSE) #NS p=.7
 chisq.test(icUEURE$avgbot, icEURE$avgbot) #Doesn't work?!
 boxplot(icUEURE$avgbot, icEURE$avgbot)
 
+#Need a bargraph of Ice Cream SOT where y-axis show average SOT (with std dev lines) and x-axis is endowed RE, unendowed RE, etc
+#Before I can do a good bargraph for this data, I need you to create a new variable.
 
+qt$newvariable <- 1 # this just creates the column and sets them all to 1.
+qt$newvariable[qt$re=="1" & qt$endow=="0"]<- "RE endowed" 
+qt$newvariable[qt$re=="1" & qt$endow=="1"] <- "RE unendowed"
+qt$newvariable[qt$re=="0" & qt$endow=="0"]    <- "URE endowed"
+qt$newvariable[qt$re=="0" & qt$endow=="1"]  <- "URE unendowed"
+qt$newvariable <- as.factor(qt$newvariable)
+str(qt$newvariable)  # this should return “Factor w/ 4 levels: “uRE endowed”…
 
+melted <- melt(qt, id.vars=c("rmsot", "newvariable"))
+icSOT <- table(qt$sot, icUEURE$sot,icERE$sot, icUERE$sot) #Error: all arguments must have the same length
+
+means <- ddply(melted, c("sot", "variable"), summarise,mean=mean(value))
+
+ggplot(data=qt, aes(newvariable,rmsot)) + 
+  geom_point() + 
+  stat_smooth(method='glm', family='binomial') + 
+  labs(title='SOT Scores of Ice Cream Decision') + 
+  xlab('Eater Type x Endowment') + 
+  ylab('SOT Scores')
+
+barplot(qt$newvariable)
+then we can put that in the X of a ggplot.
 
 attach(qt)
 # Tests
