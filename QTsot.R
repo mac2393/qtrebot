@@ -9,8 +9,10 @@ getwd()
 ##Sudy edit Jan 7 2016
 # Hi Sudy
 #THIS IS ME
->>>>>>> 41eeb170836276c94152896a141520a63634e131
-
+=======
+#please work
+# hi h hiii
+>>>>>>> da4c92f5c3ba769673ab195c3f8a596df952e81b
 setwd("C:/Users/Sudy/Desktop/QT2/")
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 options(digits=3)
