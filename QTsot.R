@@ -5,6 +5,7 @@ getwd()
 ##Sudy edit Jan 7 2016
 # Hi Sudy
 #THIS IS ME
+#please work
 
 setwd("C:/Users/Sudy/Desktop/QT2/")
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
