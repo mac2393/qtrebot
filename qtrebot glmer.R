@@ -1,21 +1,26 @@
-qt <- RFqt_Cleaned
+qt <- read.csv("RFqt_Cleaned.csv", header=TRUE)
 qtt  <-  qt
-remove(RFqt_Cleaned)
+# remove(RFqt_Cleaned)
 library(ggplot2)
 names(qt)
 str(qt$avgbot)
 str(qt$dec)
 attach(qt)
 # Hi Jan 17th 
+library(lme4)
+
 glmer1 <- glmer(dec ~ avgbot + req + path + gender + (1|subj), data=qt, family=binomial)
 summary(glmer1)
+library(effects)
 plot(allEffects(glmer1))
 
 glmer1.1 <- glmer(dec ~ avgbot + product + (1|subj), data=qt, family=binomial)
 summary(glmer1.1)
+plot(allEffects(glmer1.1)) # strong bot, trending by product
 
 glmer1.1i <- glmer(dec ~ avgbot * product + (1|subj), data=qt, family=binomial)
 summary(glmer1.1i)
+plot(allEffects(glmer1.1i))
 
 glmer1.2 <- glmer(dec ~ avgbot + path + (1|subj), data=qt, family=binomial)
 summary(glmer1.2)
