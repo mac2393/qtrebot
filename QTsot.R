@@ -1,30 +1,15 @@
 getwd()
 
-## test edit MAC Jan5th 1
-## test edit MAC Jan7th 1
-<<<<<<< HEAD
-## Sudy edit Jan 7 2016
-#  Hi Sudy
-=======
-##Sudy edit Jan 7 2016
-# Hi Sudy
-#THIS IS ME
-=======
-#please work
-# hi h hiii
->>>>>>> da4c92f5c3ba769673ab195c3f8a596df952e81b
-setwd("C:/Users/Sudy/Desktop/QT2/")
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 options(digits=3)
 library(reshape2)
 library(dplyr)
 library(ggplot2)
 library(agricolae)
+library(effects)
 
 attach(qtsot)
-names(qtsot)
-dim(qtsot)
-head(qtsot)
+
 length(subj)  #good. 204
 nSubjs = c(1:204)
 qt  <-  data.frame(subj=nSubjs) # making a dataframe
@@ -46,14 +31,12 @@ qt$bot <- as.numeric(qtsot$bot)         #SUDY - adding original BOT
 #qt$avgpp  <- as.numeric(qtsot$avgpp) #SUDY - adding avgpp which is the averaged score of macpp and luispp
 #qt$macsmrd <- as.numeric(qtsot$macsmrd)
 qt$avgsmrd <- as.numeric(qtsot$avgsmrd) #SUDY - adding combined SMRD
-qt$smrd <- as.numeric(qtsot$smrd)       #SUDY - adding original SMRD
+qt$smrd    <- as.numeric(qtsot$smrd)       #SUDY - adding original SMRD
 #qt$gender  <- as.factor (qtsot$gender)
 #qt$age     <- as.factor (qtsot$age)
 #qt$aspect  <- as.numeric(qtsot$aspect)
 qt$sot <- as.numeric(qtsot$sot) #adding standardized and averaged avgbot & avgsmrd
 
-
-?str
 attach(qt) 
 str(re)         # good
 str(req)        # good
@@ -99,11 +82,13 @@ str(macpp)      # want to rename these levels to prom and prev and ?
 str(luispp)
 str(avgpp)
 str(aspect)     # looks good
+
+###### naming levels of factor
+
 levels(gender)   <- c("Male", "Female")         # need to check that this is the order
 levels(dec)      <- c("Took", "Left")           # need to check that this is the order
 levels(product)  <- c("Shampoo", "Ice Cream")   # need to check that this is the order
 levels(endow)    <- c("endowed", "unendowed")   # need to check that this is the order
-?levels
 
 # scale the continuous variables: macbot, req, avgbot, avgsmrd
 #qt$req.z    <- scale(qt$req)
