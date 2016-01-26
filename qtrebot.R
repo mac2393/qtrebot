@@ -17,6 +17,9 @@ nSubjs = c(1:204)
 qt  <-  data.frame(subj=nSubjs) # making a dataframe
 
 glmer1 <- glmer(dec ~ avgbot + path + req + ( product | subj), data=qtsot, family=binomial)
+summary(glmer1)
+plot(allEffects(glmer1))
+
 
 # bring in all the variables from the csv into a neat df
 qt$re      <- as.factor (qtsot$re)

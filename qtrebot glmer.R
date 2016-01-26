@@ -1,16 +1,15 @@
-qt <- read.csv("RFqt_Cleaned.csv", header=TRUE)
-qtt  <-  qt
+#qt <- read.csv("RFqt_Cleaned.csv", header=TRUE)
+#qtt  <-  qt
 # remove(RFqt_Cleaned)
 library(ggplot2)
 names(qt)
 str(qt$avgbot)
 str(qt$dec)
 attach(qt)
-# Hi Jan 17th 
 library(lme4)
 
 glmer1 <- glmer(dec ~ avgbot + req + path + gender + (1|subj), data=qt, family=binomial)
-summary(glmer1)
+summary(glmer1)  # this is not right, thinks there are 204 subj
 library(effects)
 plot(allEffects(glmer1))
 
@@ -45,14 +44,16 @@ library(nlme)
 ??glme
 # lme(z ~ addloc + addass, data=apim, random = ~ +1 | dyad, na.action="na.omit")
 
-# summary(lme(dec ~ avgbot, data=qt, random = ~ +1 | subj, na.action="na.omit"))
+summary(lme(dec ~ avgbot, data=qt, random = ~ +1 | subj, na.action="na.omit"))
+
 summary(lme(avgbot ~ req, data=qt, random = ~ +1 | subj, na.action="na.omit"))
 # number of groups (subj) is correct, but not number of observations. 
 summary(lme(avgbot ~ req, data=qt, random = ~ +1 | subj, na.action="na.omit"))
 # this code does not work without the na.omit.  makes me think there is NA data in here.
 summary(lme(avgbot ~ aspect, data=qt, random = ~ +1 | subj, na.action="na.omit"))
-
-
+lme1  <- lme(avgbot ~ aspect + (subj|product), data=qtsot)
+lme1  <- lme(avgbot ~ aspect + (product|product), data=qtsot)
+lme2  <- lme(avgbot ~ path   + (product|subj), data=qtsot)
 
 which(qt$subj=="12")
 which(qt$product=="NA")
@@ -60,8 +61,6 @@ which(qt$re=="NA")
 which(qt$path=="NA")
 which(qt$subj=="NA")
 which(qt$product=="NA")
-
-
 
 s  <- glmer(dec ~ avgbot, random + 1~ product|subj, data=qt, family=binomial)
 summary(s)
@@ -117,7 +116,7 @@ bot4 <-
   theme_bw()
 ggsave('bot4.png', w=5, h=4, dpi=255)
 
-summary(lme(aspect ~ gender + random=~+1|subj, data=qt))
+summary(lme(aspect ~ gender + random = ~ +1|subj, data=qt))
 
 summary(lme(aspect ~ gender, data=qt, random = ~ +1 | subj, na.action="na.omit"))
 

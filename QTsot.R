@@ -180,11 +180,15 @@ mean(ueURE$avgsmrd) #.15
 sd(ueURE$avgsmrd) #.85
 mean(ueURE$sot) #.037
 sd(ueURE$sot) #.79
+
 t.test(eURE$avgbot, ueURE$avgbot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.7
 t.test(eURE$avgsmrd, ueURE$avgsmrd, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.2
 t.test(eURE$sot, ueURE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.2
+
 chisq.test(ueURE$avgbot, eURE$avgbot) #Doesn't work
+
 boxplot(eRE$sot, ueRE$sot, eURE$sot, ueURE$sot, main="SOTs by Endowment and Eater Type",ylab ="SOT",las=1, at =c(1,2,3,4),names=c("Endowed RE","Unendowed RE","Endowed URE","Unendowed URE"))
+
 mtext("Endowment & Eater Type", side = 1, line = 3)
 par(cex.axis=.8)
 par(cex.lab=.8)
@@ -206,10 +210,13 @@ mean(icUERE$avgsmrd) #.38
 sd(icUERE$avgsmrd) #.78
 mean(icUERE$sot) #.0846
 sd(icUERE$sot) #1.01
+
 t.test(icERE$avgbot, icUERE$avgbot, conf=0.95, var.equal=FALSE, paired=FALSE) #NS?!p=.2
 t.test(icERE$avgsmrd, icUERE$avgsmrd, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.05
 t.test(icERE$sot, icUERE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.05
-summary(aov(RE$avgbot,URE$avgbot))
+
+summary(aov(RE$avgbot~URE$avgbot))
+
 chisq.test(icERE$avgbot, icUERE$avgbot) #Doesn't work?!
 boxplot(icERE$avgbot, icUERE$avgbot)
 
@@ -228,9 +235,11 @@ mean(icUEURE$avgsmrd) #.06
 sd(icUEURE$avgsmrd) #sd=.82
 mean(icUEURE$sot) #-.107
 sd(icUEURE$sot) #.718
+
 t.test(icEURE$avgbot, icUEURE$avgbot, conf=0.95, var.equal=FALSE, paired=FALSE) #NS?!p=.2
 t.test(icEURE$avgsmrd, icUEURE$avgsmrd, conf=0.95, var.equal=FALSE, paired=FALSE) #p.01*
 t.test(icEURE$sot, icUEURE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p.008
+
 chisq.test(icUEURE$avgbot, icEURE$avgbot) #Doesn't work?!
 boxplot(icUEURE$avgbot, icEURE$avgbot)
 
@@ -245,22 +254,15 @@ qt$newvariable[qt$re=="0" & qt$endow=="1"]  <- "URE unendowed"
 
 qt$newvariable <- as.factor(qt$newvariable)
 str(qt$newvariable)  # this should return “Factor w/ 4 levels: “uRE endowed”…
+
 ggplot(data=qt, aes(newvariable,sot)) + 
   geom_point() + 
   stat_smooth(method='glm', family='binomial') + 
   labs(title='Regression of SOT Score on Product Decision') + 
   xlab('Eater Type x Endowment') + 
   ylab('Mean SOT')
-then we can put that in the X of a ggplot.
 
-(sorry if this exists somewhere else.  I am a little disoriented by this dataset because I don’t work with it enough)  
-
-  Endowed   Unendowed
-RE
-URE
 icSOT <- table(icEURE$sot, icUEURE$sot,icERE$sot, icUERE$sot) #Error: all arguments must have the same length
-
-
 
 #Creating Shampoo Endowed and Unendowed RE
 sERE<-eRE %>% filter(product == "A") #shampoo endowed RE
@@ -369,6 +371,8 @@ summary(lm(qtsot$dec~qtsot$sot))
 fit1 <- glm(qtsot$dec ~ qtsot$sot, data=qtsot)
 summary(fit1)
 confint(fit1, level=0.95)
+plot(allEffects(fit1))
+
 ggplot(data=qtsot, aes(sot, dec)) + 
   geom_point() + 
   stat_smooth(method='glm', family='binomial') + 
@@ -377,7 +381,7 @@ ggplot(data=qtsot, aes(sot, dec)) +
   ylab('Product Decision')
 
 
-#Linear Regression of Ice Cream SOT on Dec
+#Logistic Regression of Ice Cream SOT on Dec
 ggplot(data=IC, aes(sot, dec)) + 
   geom_point() + 
   stat_smooth(method='glm', family='binomial') + 
@@ -386,7 +390,7 @@ ggplot(data=IC, aes(sot, dec)) +
   ylab('Ice Cream Decision')
 summary(lm(IC$dec~IC$sot)) #***
 
-
+# none of these tests are right.  Chi Sq is not the right analysi
 # Chi Sq goodness of fit
 chisq.test(dec, re)     # * makes sense that whether or not you're an RE will affect your decision
 plot(dec, re) 
@@ -422,9 +426,9 @@ chisq.test(dec, age)    # NS why is age a factor? Cant it be numeric?
 library(lpSolve)
 library(vcd)
 BOT <- qt[,7,23]
-kappa2(BOT[,c(7,23)], "unweighted")
+kappa(BOT[,c(7,23)], "unweighted")
 ?kappa
-cor(macbot,luisbot)
+cor(macbot,luisbot) # .91
 
 hist(avgsmrd, breaks=seq(10,35,1))
 hist(smrd)
