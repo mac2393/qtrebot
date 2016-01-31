@@ -8,25 +8,21 @@ library(dplyr)
 library(ggplot2)
 library(agricolae)
 library(plyr)
-attach(qtsot)
+library(effects)
 names(qtsot)
-dim(qtsot)
-head(qtsot)
-length(subj)  #good. 204
-nSubjs = c(1:204)
-qt  <-  data.frame(subj=nSubjs) # making a dataframe
+attach(qtsot)
+##
+qtsot$re  <- as.factor (qtsot$re)
+qtsot$req <- as.numeric(qtsot$req)
+qtsot$dec <- as.factor (qtsot$dec)
+##
 
-glmer1 <- glmer(dec ~ avgbot + path + req + ( product | subj), data=qtsot, family=binomial)
-summary(glmer1)
+glmer1 <- glmer(dec ~ avgbot + path + ( product | subj), data=qtsot, family=binomial)
+summary(glmer1)  # this is right because it returns 102 subj, 204 observations
 plot(allEffects(glmer1))
 
+t.test(macbot,luisbot) # good no difference
 
-# bring in all the variables from the csv into a neat df
-qt$re      <- as.factor (qtsot$re)
-qt$req     <- as.numeric(qtsot$req)
-qt$dec     <- as.factor (qtsot$dec)
-t.test(req,macbot)
-t.test(macbot,luisbot)
 qt$product <- as.factor (qtsot$product)
 qt$endow   <- as.factor (qtsot$path)
 qt$macbot  <- as.numeric(qtsot$macbot)
