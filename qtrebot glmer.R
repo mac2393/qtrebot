@@ -8,49 +8,38 @@ str(qt$dec)
 attach(qt)
 library(lme4)
 
-glmer1 <- glmer(dec ~ avgbot + req + path + gender + (1|subj), data=qt, family=binomial)
+glmer1 <- glmer(dec ~ avgbot + req + path + gender + (product|subj), data=qt, family=binomial)
 summary(glmer1)  # this is not right, thinks there are 204 subj
 library(effects)
 plot(allEffects(glmer1))
 
-glmer1.1 <- glmer(dec ~ avgbot + product + (1|subj), data=qt, family=binomial)
+glmer1.1 <- glmer(dec ~ avgbot + product + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.1)
 plot(allEffects(glmer1.1)) # strong bot, trending by product
 
-glmer1.1i <- glmer(dec ~ avgbot * product + (1|subj), data=qt, family=binomial)
+glmer1.1i <- glmer(dec ~ avgbot * product + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.1i)
 plot(allEffects(glmer1.1i))
 
-glmer1.2 <- glmer(dec ~ avgbot + path + (1|subj), data=qt, family=binomial)
+glmer1.2 <- glmer(dec ~ avgbot + path + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.2)
+plot(allEffects(glmer1.2))
 
-glmer1.2i <- glmer(dec ~ avgbot * path + (1|subj), data=qt, family=binomial)
+glmer1.2i <- glmer(dec ~ avgbot * path + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.2i)
 
-glmer1.3 <- glmer(dec ~ avgbot + re + (1|subj), data=qt, family=binomial)
+glmer1.3 <- glmer(dec ~ avgbot + re + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.3)
 
-glmer1.3i <- glmer(dec ~ avgbot * re + (1|subj), data=qt, family=binomial)
+glmer1.3i <- glmer(dec ~ avgbot * re + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.3i)
 
-glmer1.4 <- glmer(dec ~ avgbot + gender + (1|subj), data=qt, family=binomial)
+glmer1.4 <- glmer(dec ~ avgbot + gender + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.4)
 
-#lmer(y ~ time + (time | subjects), data=data)
+glmer1.5 <- glmer(dec ~ req + avgbot + (product|subj), data=qtsot, family=binomial)
+summary(glmer1.5)
 
-summary(glmer(dec ~ avgbot + (product | subj), data=qt, family=binomial))
-
-library(nlme)
-??glme
-# lme(z ~ addloc + addass, data=apim, random = ~ +1 | dyad, na.action="na.omit")
-
-summary(lme(dec ~ avgbot, data=qt, random = ~ +1 | subj, na.action="na.omit"))
-
-summary(lme(avgbot ~ req, data=qt, random = ~ +1 | subj, na.action="na.omit"))
-# number of groups (subj) is correct, but not number of observations. 
-summary(lme(avgbot ~ req, data=qt, random = ~ +1 | subj, na.action="na.omit"))
-# this code does not work without the na.omit.  makes me think there is NA data in here.
-summary(lme(avgbot ~ aspect, data=qt, random = ~ +1 | subj, na.action="na.omit"))
 lme1  <- lme(avgbot ~ aspect + (subj|product), data=qtsot)
 lme1  <- lme(avgbot ~ aspect + (product|product), data=qtsot)
 lme2  <- lme(avgbot ~ path   + (product|subj), data=qtsot)
