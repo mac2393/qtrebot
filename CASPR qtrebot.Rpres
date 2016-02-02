@@ -1,0 +1,35 @@
+CASPR
+Query Theory
+Balance of Thoughts
+Restrained Eaters
+========================================================
+author: Sudy Majd and Mark A. Conley
+date: February 10th, 2016
+
+Background
+========================================================
+
+For more details on authoring R presentations click the
+**Help** button on the toolbar.
+
+- Query Theory
+- Regulatory Focus
+- Restrained Eating
+
+Scrutinize the Model
+========================================================
+
+```{r}
+glmer(dec ~ avgbot + path + ( product | subj), data=qtsot, family=binomial)
+```
+
+Decision Plot
+========================================================
+
+```{r, echo=FALSE}
+ggplot(qtsot, aes(x=avgbot, y=as.numeric(dec1)-1))+
+  geom_point(color="black", position=position_jitter(h=.01, w=.29)) +
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  facet_grid(gender~product)+
+  theme_bw()
+```

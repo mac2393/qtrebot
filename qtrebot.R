@@ -1,7 +1,6 @@
-getwd()
-setwd("/Users/Sudy/Desktop/QT2/Analysis")
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 options(digits=3)
+###
 library(lme4)
 library(reshape2)
 library(dplyr)
@@ -9,6 +8,7 @@ library(ggplot2)
 library(agricolae)
 library(plyr)
 library(effects)
+##
 names(qtsot)
 attach(qtsot)
 ##
@@ -17,33 +17,27 @@ qtsot$req <- as.numeric(qtsot$req)
 qtsot$dec <- as.factor (qtsot$dec)
 ##
 
-glmer1 <- glmer(dec ~ avgbot + path + ( product | subj), data=qtsot, family=binomial)
-summary(glmer1)  # this is right because it returns 102 subj, 204 observations
-plot(allEffects(glmer1))
-
 t.test(macbot,luisbot) # good no difference
 
-qt$product <- as.factor (qtsot$product)
-qt$endow   <- as.factor (qtsot$path)
-qt$macbot  <- as.numeric(qtsot$macbot)
-qt$luisbot  <- as.numeric(qtsot$luisbot) #SUDY - adding luis BOT 
-qt$avgbot  <- as.numeric(qtsot$avgbot)  #SUDY - adding combined BOT
-qt$bot <- as.numeric(qtsot$bot)         #SUDY - adding original BOT
-#qt$mac     <- as.factor (qtsot$mac)
-#qt$luis    <- as.factor (qtsot$luis)
-#qt$macpp  <- as.numeric(qtsot$macpp) #SUDY - adding macpp
-#qt$luispp  <- as.numeric(qtsot$luispp) #SUDY - adding luispp
-#qt$avgpp  <- as.numeric(qtsot$avgpp) #SUDY - adding avgpp which is the averaged score of macpp and luispp
-#qt$macsmrd <- as.numeric(qtsot$macsmrd)
-qt$avgsmrd <- as.numeric(qtsot$avgsmrd) #SUDY - adding combined SMRD
-qt$smrd <- as.numeric(qtsot$smrd)       #SUDY - adding original SMRD
-#qt$gender  <- as.factor (qtsot$gender)
-#qt$age     <- as.factor (qtsot$age)
-#qt$aspect  <- as.numeric(qtsot$aspect)
-qt$rmsot <- as.numeric(qtsot$rmsot) #adding standardized and averaged avgbot & avgsmrd
+qtsot$product <- as.factor (qtsot$product)
+qtsot$endow   <- as.factor (qtsot$path)
+qtsot$macbot  <- as.numeric(qtsot$macbot)
+qtsot$luisbot  <- as.numeric(qtsot$luisbot) #SUDY - adding luis BOT 
+qtsot$avgbot  <- as.numeric(qtsot$avgbot)  #SUDY - adding combined BOT
+qtsot$bot <- as.numeric(qtsot$bot)         #SUDY - adding original BOT
+qtsot$mac     <- as.factor (qtsot$mac)
+qtsot$luis    <- as.factor (qtsot$luis)
+qtsot$macpp  <- as.numeric(qtsot$macpp) #SUDY - adding macpp
+qtsot$luispp  <- as.numeric(qtsot$luispp) #SUDY - adding luispp
+qtsot$avgpp  <- as.numeric(qtsot$avgpp) #SUDY - adding avgpp which is the averaged score of macpp and luispp
+qtsot$macsmrd <- as.numeric(qtsot$macsmrd)
+qtsot$avgsmrd <- as.numeric(qtsot$avgsmrd) #SUDY - adding combined SMRD
+qtsot$smrd <- as.numeric(qtsot$smrd)       #SUDY - adding original SMRD
+qtsot$gender  <- as.factor (qtsot$gender)
+qtsot$age     <- as.factor (qtsot$age)
+qtsot$aspect  <- as.numeric(qtsot$aspect)
+qtsot$rmsot <- as.numeric(qtsot$rmsot) #adding standardized and averaged avgbot & avgsmrd
 
-
-?str
 attach(qt) 
 str(re)         # good
 str(req)        # good
@@ -58,32 +52,35 @@ str(avgpp)      # SUDY added avgpp
 str(luisbot)    # SUDY added luisbot
 str(age)        # not sure why age is 1,2,3,4,5 -- SUDY each number corresponds to a range
 str(gender)     # want to rename these levels Male and Female
-#qt$gender  <- as.numeric (qtsot$gender) #SUDY remnamed gender levels 
-#qt$gender[qt$gender=="1"] <- "Male"     #SUDY remnamed gender levels
-#qt$gender[qt$gender=="2"] <- "Female"   #SUDY remnamed gender levels
+qtsot$gender  <- as.numeric (qtsot$gender) #SUDY remnamed gender levels 
+qtsot$gender[qtsot$gender=="1"] <- "Male"     #SUDY remnamed gender levels
+qtsot$gender[qtsot$gender=="2"] <- "Female"   #SUDY remnamed gender levels
 
 str(product)    # want to rename these levels Shampoo and IC
-#qt$product <- as.factor(qtsot$product) 
-#install.packages("car")
-#library(car)
-#qt$product <- recode(qt$product,"NA=1")
-#qt$product <- recode(qt$product,"B=2")
-#qt$product <- recode(qt$product,"1=Shampoo")
-#qt$product[qt$product=="1"] <- "Shampoo"
-#qt$product[qt$product=="NA"] <- "A"
-#qt$product[qt$product=="NA"] <- "B"
+qtsot$product <- as.factor(qtsot$product) 
 
-str(dec)        # want to rename these levels to took and left
-#qt$dec  <- as.numeric (qtsot$dec) #SUDY remnamed decision 
-#qt$dec[qt$dec==1] <- "Take" #SUDY remnamed decision
-#qt$dec[qt$dec==0] <- "Left" #SUDY remnamed decision
+#library(car)
+#qtsot$product <- recode(qtsot$product,"NA=1")
+#qtsot$product <- recode(qtsot$product,"B=2")
+#qtsot$product <- recode(qtsot$product,"1=Shampoo")
+#qtsot$product[qtsot$product=="1"] <- "Shampoo"
+#qtsot$product[qtsot$product=="NA"] <- "A"
+#qtsot$product[qtsot$product=="NA"] <- "B"
+
+qtsot$dec  <- as.numeric (qtsot$dec) #SUDY remnamed decision 
+qtsot$dec[qtsot$dec==1] <- "Take" #SUDY remnamed decision
+qtsot$dec[qtsot$dec==2] <- "Left" #SUDY remnamed decision
+summary(qtsot$dec)
+str(qtsot$dec)
 
 str(endow) # want to rename these levels to endowed and unendowed
-#qt$endow  <- as.numeric (qtsot$endow)  
-#qt$endow[qt$endow==0] <- "Endowed" 
-#qt$endow[qt$endow==NA] <- "0"
-#qt$endow <- recode(qt$endow, "NA=0")
-#qt$dec[qt$dec==0] <- "Left" #SUDY remnamed decision
+qtsot$endow  <- as.numeric(qtsot$endow)  
+qtsot$endow[qtsot$endow==0] <- "Endowed" 
+qtsot$endow[qtsot$endow==NA] <- "0"
+qtsot$endow <- recode(qtsot$endow, "NA=0")
+str(qtsot$endow)
+
+#qtsot$dec[qtsot$dec==0] <- "Left" #SUDY remnamed decision
 
 str(macpp)      # want to rename these levels to prom and prev and ?
 str(luispp)
@@ -97,27 +94,18 @@ levels(endow)    <- c("endowed", "unendowed")   # need to check that this is the
 
 #Comparing histogram distributions of SMRD/BOT/SOT RF vs. QT
 # scale the continuous variables: bot and smrd to make original SOT
-#qt$req.z    <- scale(qt$req)
-#qt$macbot.z <- scale(qt$macbot)  
-#qt$luisbot.z<-scale(qt$luisbot)
-qt$bot.z <- scale(qt$bot)
-qt$smrd.z <- scale(qt$smrd)
-qt$qtsot <- ((qt$bot.z + qt$smrd.z)/2) #creating Query Theory SOT score
-qt$qtsot <- as.numeric(qt$qtsot)
-#qt$avgpp.z <- scale(qt$avgpp)
-hist(qt$avgsmrd, main="Histogram of Regulatory Focus SMRD",xlab="SMRD")
-hist(qt$smrd, main="Histogram of Query Theory SMRD",xlab="SMRD")
-hist(qt$avgbot, main="Histogram of Regulatory Focus BOT",xlab="BOT", ylim=c(0,80))
-axis(side=1, at=seq(-8,8))
-axis(side=2, at=seq(0,0))
-hist(qt$bot, main="Histogram of Query Theory BOT",xlab="BOT", ylim=c(0,80))
-axis(side=1, at=seq(-8,8))
-axis(side=2, at=seq(0,0))
-hist(qt$rmsot, main="Histogram of Regulatory Focus SOT",xlab="SOT", xlim=c(-3,3), ylim=c(0,60))
-hist(qt$qtsot, main="Histogram of Query Theory SOT",xlab="SOT", xlim=c(-3,3), ylim=c(0,60))
-cor(qt$avgsmrd,qt$smrd) #0.273
-cor(qt$avgbot,qt$bot) #0.572
-cor(qt$rmsot,qt$qtsot) #0.448
+#qtsot$req.z    <- scale(qtsot$req)
+#qtsot$macbot.z <- scale(qtsot$macbot)  
+#qtsot$luisbot.z<-scale(qtsot$luisbot)
+qtsot$bot.z <- scale(qtsot$bot)
+qtsot$smrd.z <- scale(qtsot$smrd)
+qtsot$qtsot <- ((qtsot$bot.z + qtsot$smrd.z)/2) #creating Query Theory SOT score
+qtsot$qtsot <- as.numeric(qtsot$qtsot)
+#qtsot$avgpp.z <- scale(qtsot$avgpp)
+
+cor(qtsot$avgsmrd,qtsot$smrd) #0.273
+cor(qtsot$avgbot,qtsot$bot) #0.572
+cor(qtsot$rmsot,qtsot$qtsot) #0.448
 
 ###Creating RE, URE dataframe
 RE<-qt %>% filter(re == "1")
@@ -137,10 +125,6 @@ sd(URE$sot) #.822
 t.test(RE$avgbot, URE$avgbot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.01
 t.test(RE$avgsmrd, URE$avgsmrd, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.2
 t.test(RE$sot, URE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.02
-hist(URE$avgbot, main="Histogram of BOT URE",ylab="Frequency",xlab="Distribution of BOT of URE",axes=FALSE)
-axis(side=1, at=seq(-8,8))
-axis(side=2, at=seq(0,40))
-?hist
 
 ###Creating E and UE dataframe
 E<-qt %>% filter(endow == "0")
@@ -293,16 +277,16 @@ boxplot(icUEURE$avgbot, icEURE$avgbot)
 #Need a bargraph of Ice Cream SOT where y-axis show average SOT (with std dev lines) and x-axis is endowed RE, unendowed RE, etc
 #Before I can do a good bargraph for this data, I need you to create a new variable.
 
-qt$newvariable <- 1 # this just creates the column and sets them all to 1.
-qt$newvariable[qt$re=="1" & qt$endow=="0"]<- "RE endowed" 
-qt$newvariable[qt$re=="1" & qt$endow=="1"] <- "RE unendowed"
-qt$newvariable[qt$re=="0" & qt$endow=="0"]    <- "URE endowed"
-qt$newvariable[qt$re=="0" & qt$endow=="1"]  <- "URE unendowed"
-qt$newvariable <- as.factor(qt$newvariable)
-str(qt$newvariable)  # this should return “Factor w/ 4 levels: “uRE endowed”…
+qtsot$newvariable <- 1 # this just creates the column and sets them all to 1.
+qtsot$newvariable[qtsot$re=="1" & qtsot$endow=="0"]<- "RE endowed" 
+qtsot$newvariable[qtsot$re=="1" & qtsot$endow=="1"] <- "RE unendowed"
+qtsot$newvariable[qtsot$re=="0" & qtsot$endow=="0"]    <- "URE endowed"
+qtsot$newvariable[qtsot$re=="0" & qtsot$endow=="1"]  <- "URE unendowed"
+qtsot$newvariable <- as.factor(qtsot$newvariable)
+str(qtsot$newvariable)  # this should return “Factor w/ 4 levels: “uRE endowed”…
 
 melted <- melt(qt, id.vars=c("rmsot", "newvariable"))
-icSOT <- table(qt$sot, icUEURE$sot,icERE$sot, icUERE$sot) #Error: all arguments must have the same length
+icSOT <- table(qtsot$sot, icUEURE$sot,icERE$sot, icUERE$sot) #Error: all arguments must have the same length
 
 means <- ddply(melted, c("sot", "variable"), summarise,mean=mean(value))
 
@@ -313,7 +297,7 @@ ggplot(data=qt, aes(newvariable,rmsot)) +
   xlab('Eater Type x Endowment') + 
   ylab('SOT Scores')
 
-barplot(qt$newvariable)
+barplot(qtsot$newvariable)
 then we can put that in the X of a ggplot.
 
 attach(qt)
@@ -375,7 +359,9 @@ summary(lm(macpp~ aspect))    # NS
 summary(lm(avgsmrd~ aspect))  # SUDY ***
 summary(lm(req~aspect))       # NS
 
-#Linear regression of Overall SOT on Dec
+#Linear regression of Overall SOT on Dec 
+# pretty sure this should be a glm because dec is binary
+# and i think it needs to be a glmer becuase of the dataframe. 
 qtsot$dec <- as.numeric(qtsot$dec)
 summary(lm(qtsot$dec~qtsot$sot))
 fit1 <- glm(qtsot$dec ~ qtsot$sot, data=qtsot)
@@ -447,3 +433,142 @@ hist(datause$REQ, breaks=seq(10,35,1),
      main="Histogram of Restrained Eater Questionnaire Scores",ylab="Frequency",xlab="Scores",axes=FALSE)
 
 #UEprodA<-unendowment %>% filter(Product == "A")
+
+###Creating RE, URE dataframe
+RE<-qt %>% filter(re == "1")
+summary(RE) #avgbot = .02
+sd(RE$avgbot) #2.34
+mean(RE$avgsmrd) #avgsmrd = .121
+sd(RE$avgsmrd) #avgsmrd = .83
+mean(RE$sot) #-.135
+sd(RE$sot) #.842
+URE<-qt %>% filter(re == "0")
+sd(URE$avgbot) #2.21
+summary(URE) #avgbot=.84
+mean(URE$avgsmrd) #avgsmrd = .27
+sd(URE$avgsmrd) #avgsmrd = .84
+mean(URE$sot) #.132
+sd(URE$sot) #.822
+t.test(RE$avgbot, URE$avgbot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.01
+t.test(RE$avgsmrd, URE$avgsmrd, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.2
+t.test(RE$sot, URE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.02
+hist(URE$avgbot, main="Histogram of BOT URE",ylab="Frequency",xlab="Distribution of BOT of URE",axes=FALSE)
+axis(side=1, at=seq(-8,8))
+axis(side=2, at=seq(0,40))
+?hist
+
+###Creating E and UE dataframe
+E<-qt %>% filter(endow == "0")
+mean(E$sot) #-0.0425
+sd(E$sot) #0.843
+UE<-qt %>% filter(endow == "1")
+mean(UE$sot) #0.0453
+sd(UE$sot) #0.84
+boxplot(E$sot,UE$sot)
+t.test(E$sot, UE$sot, conf=0.95, var.equal=FALSE, paired=FALSE) #p=.5
+
+###Creating Ice Cream and Shampoo dataframe
+S  <-qtsot %>% filter(product == "A")
+IC <-qtsot %>% filter(product == "B")
+
+#Overall Endowed and Unendowed RE
+eRE<-RE %>% filter(endow == "0") #endowed RE
+summary(eRE) #avgbot =-.41
+sd(eRE$avgbot) #1.95
+mean(eRE$avgsmrd) #-.009
+sd(eRE$avgsmrd) #.836
+mean(eRE$sot) #-.306
+sd(eRE$sot) #.764
+ueRE<-RE %>% filter(endow == "1") #unendowed RE
+summary(ueRE) #avgbot =.5
+sd(ueRE$avgbot) #2.64
+mean(ueRE$avgsmrd) #.26
+sd(ueRE$avgsmrd) #.82
+mean(ueRE$sot) #.05
+sd(ueRE$sot) #.89
+chisq.test(eRE$avgbot, ueRE$avgbot) #Doesn't work?!
+summary(aov(eRE$avgbot, ueRE$avgbot)) #Doesn't work?!
+boxplot(eRE$sot, ueRE$sot)
+
+#Overall Endowed and Unendowed URE
+eURE<-URE %>% filter(endow == "0") #endowed URE
+summary(eURE) #avgbot =.94
+sd(eURE$avgbot) #2.07
+mean(eURE$avgsmrd) #.38
+sd(eURE$avgsmrd) #.84
+mean(eURE$sot) #.221
+sd(eURE$sot) #.843
+ueURE<-URE %>% filter(endow == "1") #unendowed URE
+summary(ueURE) #avgbot =.5
+sd(ueURE$avgbot) #2.36
+mean(ueURE$avgsmrd) #.15
+sd(ueURE$avgsmrd) #.85
+mean(ueURE$sot) #.037
+sd(ueURE$sot) #.79
+
+#Creating IC Endowed and Unendowed RE
+icERE<-eRE %>% filter(product == "B") #ic endowed RE
+mean(icERE$avgbot) #avgbot =-.83
+sd(icERE$avgbot) #2.23
+mean(icERE$avgsmrd) #-.07
+sd(icERE$avgsmrd) #.855
+mean(icERE$sot) #-.438
+summary(icERE$sot)
+sd(icERE$sot) #.842
+hist(icERE$sot)
+icUERE<-ueRE %>% filter(product == "B") #ic unendowed RE
+mean(icUERE$avgbot) #avgbot =.33
+sd(icUERE$avgbot) #3.28
+mean(icUERE$avgsmrd) #.38
+sd(icUERE$avgsmrd) #.78
+mean(icUERE$sot) #.0846
+sd(icUERE$sot) #1.01
+
+#Creating IC endowed and unendowed URE
+icEURE<-URE %>% filter(endow == "0" & product=="B") #ice cream endowed URE
+mean(icEURE$avgbot) #1.25
+sd(icEURE$avgbot) #sd=1.96
+mean(icEURE$avgsmrd) #.63
+sd(icEURE$avgsmrd) #.7
+mean(icEURE$sot) #.433
+sd(icEURE$sot) #.688
+icUEURE<-URE %>% filter(endow == "1" & product=="B") #ice cream unendowed URE
+mean(icUEURE$avgbot) #.3
+sd(icUEURE$avgbot) #sd=2.02
+mean(icUEURE$avgsmrd) #.06
+sd(icUEURE$avgsmrd) #sd=.82
+mean(icUEURE$sot) #-.107
+sd(icUEURE$sot) #.718
+
+icSOT <- table(icEURE$sot, icUEURE$sot,icERE$sot, icUERE$sot) #Error: all arguments must have the same length
+
+#Creating Shampoo Endowed and Unendowed RE
+sERE<-eRE %>% filter(product == "A") #shampoo endowed RE
+mean(sERE$avgbot) #avgbot =.03
+sd(sERE$avgbot) #1.52
+mean(sERE$avgsmrd) #.06
+sd(sERE$avgsmrd) #.83
+mean(sERE$sot) #-.168
+sd(sERE$sot) #.662
+sUERE<-ueRE %>% filter(product == "A") #shampoo unendowed RE
+mean(sUERE$avgsmrd) #.15
+sd(sUERE$avgsmrd) #.86
+mean(sUERE$sot) #.0225
+sd(sUERE$sot) #.781
+boxplot(sERE$avgbot, sUERE$avgbot)
+
+#Creating Shampoo endowed and unendowed URE
+sEURE<-URE %>% filter(endow == "0" & product=="A") #shampoo endowed URE
+mean(sEURE$avgbot) #.65
+sd(sEURE$avgbot) #sd=2.17
+mean(sEURE$avgsmrd) #.14
+sd(sEURE$avgsmrd) #.91
+mean(sEURE$sot) #.015
+sd(sEURE$sot) #.93
+sUEURE<-URE %>% filter(endow == "1" & product=="A") #shampoo unendowed URE
+mean(sUEURE$avgbot) #1.2
+sd(sUEURE$avgbot) #sd=2.62
+mean(sUEURE$avgsmrd) #.23
+sd(sUEURE$avgsmrd) #.88
+mean(sUEURE$sot) #.182
+sd(sUEURE$sot) #.858
