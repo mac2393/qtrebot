@@ -1,5 +1,5 @@
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
-qtsotraw <- read.csv("RF_Coded_11.10.csv", header=TRUE)
+#qtsotraw <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 
 options(digits=3)
 
@@ -47,7 +47,6 @@ str(luisbot)    # SUDY added luisbot
 str(age)        # not sure why age is 1,2,3,4,5 -- SUDY each number corresponds to a range
 
 #Need a bargraph of Ice Cream SOT where y-axis show average SOT (with std dev lines) and x-axis is endowed RE, unendowed RE, etc
-#Before I can do a good bargraph for this data, I need you to create a new variable.
 
 qtsot$newvariable <- 1 # this just creates the column and sets them all to 1.
 qtsot$newvariable[qtsot$re=="1" & qtsot$endow=="0"] <- "RE endowed" 
@@ -97,4 +96,5 @@ summary(qtsot$sot)
 qtsubice <- subset(qtsot, product=="Ice Cream")
 qtsubshamp <- subset(qtsot, product=="Shampoo")
 
+# I want for each participant, the avgbot for A only. 
 

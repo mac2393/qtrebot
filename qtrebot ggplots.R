@@ -55,6 +55,15 @@ img2.2 <-
   ylab("Decision \n Did not Take     -    Took it")
 ggsave(img2.2, filename = "qtrebot2.2.png", w=6, h=4.5, dpi=255)
 
+# newvariable to get at both endowment and eater type.   Makes a grid.  No gain. 
+ggplot(qtsubice, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
+  geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  theme_bw()+
+  ggtitle("Ice Cream & Regulatory Focus \n by Eater Type")+
+  facet_wrap(~newvariable)+
+  xlab("Focus Predominance")+
+  ylab("Decision \n Did not Take     -    Took it")
 
 
 

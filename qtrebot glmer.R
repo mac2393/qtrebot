@@ -1,34 +1,95 @@
 ### this script will be TESTS only, and needs to be preceeded by a general setup script.
-
 library(nlme)
 library(lme4)
-
-glmer1 <- glmer(dec ~ avgbot + req + path + gender + (product|subj), data=qtsot, family=binomial)
-summary(glmer1)  # Model failed to converge with max|grad| = 0.00974085 (tol = 0.001, component 1)  #too many vars?
 library(effects)
+
+
+# Model failed to converge with max|grad| = 0.00974085 (tol = 0.001, component 1)  
+# too many vars?
+glmer1 <- glmer(dec ~ avgbot + req + path + gender + (product|subj), data=qtsot, family=binomial)
+summary(glmer1)  
 plot(allEffects(glmer1))
 
-glmer1.0 <- glmer(dec ~ avgbot.z + path + ( product | subj), data=qtsot, family=binomial)
-summary(glmer1.0)  # this model does not fail to converge
+# Focus (measured by avgbotA) predicts*** decision for either product.  Endow does not. 
+glmer1.0 <- glmer(dec ~ avgbot + path + ( product | subj), data=qtsot, family=binomial)
+summary(glmer1.0)  # both products are in this model, so using avgbot for both
 plot(allEffects(glmer1.0))
 
-glmer1.1 <- glmer(dec ~ avgbot + product + (product|subj), data=qtsot, family=binomial)
-summary(glmer1.1)
-plot(allEffects(glmer1.1)) # strong bot, trending by product
+# Adding ENDOW and REQ into the model, but neither of them are signif and Focus still is (***)
+# lets try the same thing using avgbotA orthogonal to ice cream. 
+glmer1.01 <- glmer(dec ~ avgbot + path + req + (product|subj), data=qtsot, family=binomial)
+summary(glmer1.01)
 
-glmer1.1i <- glmer(dec ~ avgbot * product + (product|subj), data=qtsot, family=binomial)
-summary(glmer1.1i) # Model failed to converge with max|grad| = 0.0967525 (tol = 0.001, component 1) # Model is nearly unidentifiable: very large eigenvalue # Rescale variables?
+# Orthogonal: What a person decides about IC is predicted* by Focus predom taken from Shampoo thoughts!
+glm0 <- glm(dec ~ avgbotA, data=qtsubice, family=binomial)
+summary(glm0)
+plot(allEffects(glm0))
+
+# trending for focus, nothing for endow
+glm0.1 <- glm(dec ~ avgbotA + path, data=qtsubice, family=binomial)
+summary(glm0.1)
+plot(allEffects(glm0.1))
+
+# REQ is signficant, nothing else is
+glm0.2 <- glm(dec ~ avgbotA + path + req, data=qtsubice, family=binomial)
+summary(glm0.2)
+plot(allEffects(glm0.2))
+
+# REQ signficant, Focus trend 
+glm0.3 <- glm(dec ~ avgbotA + req, data=qtsubice, family=binomial)
+summary(glm0.3)
+plot(allEffects(glm0.3))
+
+# REQ signficant on it's own.
+glm0.4 <- glm(dec ~ req, data=qtsubice, family=binomial)
+summary(glm0.4)
+plot(allEffects(glm0.4))
+
+# REQ does not predict the Shampoo decision - good.  It's working. 
+glm0.41 <- glm(dec ~ req, data=qtsubshamp, family=binomial)
+summary(glm0.41)
+plot(allEffects(glm0.41))
+
+# REQ signficant, endow is NOT
+glm0.5 <- glm(dec ~ req + path, data=qtsubice, family=binomial)
+summary(glm0.5)
+plot(allEffects(glm0.5))
+
+glm0 <- glm(dec ~ avgbotA, data=qtsubice, family=binomial)
+summary(glm0)
+plot(allEffects(glm0))
+# No interaction between avgbot and endowment for all the products
+glmer1.1i <- glmer(dec ~ avgbot * path + (product|subj), data=qtsot, family=binomial)
+summary(glmer1.1i)
+plot(allEffects(glmer1.1i)) 
+
+# Trending interaction for the IC decision only, between endow and avgbot
+glm1i <- glm(dec ~ avgbotA * path, data=qtsubice, family=binomial)
+summary(glm1i)
+plot(allEffects(glm1i))
+
+# REQ alone predicts the decision to take IC
+glm2 <- glm(dec ~ req, data=qtsubice, family=binomial)
+summary(glm2)
+plot(allEffects(glm2))
+
+glm2.1  <- glm(dec ~ avgbotA, data=qtsubice, family=binomial)
+summary(glm2.1)
+plot(allEffects(glm2.1))
+
+glmer1.1i <- glmer(dec ~ avgbot * path + (product|subj), data=qtsot, family=binomial)
+summary(glmer1.1i)
 plot(allEffects(glmer1.1i))
 
-glmer1.2 <- glmer(dec ~ avgbot * path + (product|subj), data=qtsot, family=binomial)
-summary(glmer1.2)
-plot(allEffects(glmer1.2))
+glmer1.1i <- glmer(dec ~ avgbotA * path + (product|subj), data=qtsubice, family=binomial)
+summary(glmer1.1i)
+plot(allEffects(glmer1.1i))
 
 glmer1.2a <- glmer(dec ~ path * re + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.2a)
 plot(allEffects(glmer1.2a))
 
-glmer1.2i <- glmer(dec ~ avgbot * path + (product|subj), data=qtsot, family=binomial)
+glmer1.2i <- glmer(dec ~ avgbotA * path + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.2i)
 plot(allEffects(glmer1.2i)) # no interaction 
 
@@ -69,15 +130,23 @@ summary(glmer2)
 plot(allEffects(glmer2.1))
 
 #######
-glm1 <- glm(dec ~ avgbot * path, data=qtsubice, family=binomial)
+glm0 <- glm(dec ~ avgbotA + path, data=qtsubice, family=binomial)
+summary(glm0)
+plot(allEffects(glm0))
+
+glm0.1 <- glm(dec ~ path, data = qtsubice, family=binomial)
+summary(glm0.1)
+plot(allEffects(glm0.1))
+
+glm1 <- glm(dec ~ avgbotA * path, data=qtsubice, family=binomial)
 summary(glm1)
 plot(allEffects(glm1))
 
-glm2 <- glm(dec ~ avgbot + path, data=qtsubice, family=binomial)
+glm2 <- glm(dec ~ avgbotA + path, data=qtsubice, family=binomial)
 summary(glm2)
 plot(allEffects(glm2))
 
-glm3 <- glm(dec ~ avgbot + path, data=qtsubshamp, family=binomial)
+glm3 <- glm(dec ~ avgbotA + path, data=qtsubshamp, family=binomial)
 summary(glm3)
 plot(allEffects(glm3))
 
@@ -85,17 +154,25 @@ glm4 <- glm(dec ~ avgbot + req, data=qtsubice, family=binomial)
 summary(glm4)
 plot(allEffects(glm4))
 
-glm4i <- glm(dec ~ avgbot * req, data=qtsubice, family=binomial)
+glm4i <- glm(dec ~ avgbotA * req, data=qtsubice, family=binomial)
 summary(glm4i)
 plot(allEffects(glm4i))
 
+# Endowment does not predict the taking of ice cream
 glm5 <- glm(dec ~ path, data=qtsubice, family=binomial)
 summary(glm5)
 plot(allEffects(glm5))
 
-glm6 <- glm(dec ~ path, data=qtsubshamp, family=binomial)
+# Endowment does not predict the taking of shampoo
+glm5.1 <- glm(dec ~ path, data=qtsubshamp, family=binomial)
+summary(glm5.1)
+plot(allEffects(glm5.1))
+
+# Endowment does not predict the taking of 1 or the other. (using whole dataframe)
+glm6 <- glm(dec ~ path, data=qtsot, family=binomial)
 summary(glm6)
 plot(allEffects(glm6))
+
 
 ###### Linear Mixed Models  ####
 # not working right now # Jan 31st
