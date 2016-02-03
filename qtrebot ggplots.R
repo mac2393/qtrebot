@@ -8,26 +8,64 @@ ggplot(qtsot, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
   stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
   facet_grid(~product)+
   theme_bw()+
-  ggtitle("Regulatory Focus Affects \n Choice About Ice Cream")+
+  ggtitle("Regulatory Focus Affects \n Decision to Take the Product")+
   xlab("Focus Predominance")+
   ylab("Decision \n Did not Take     -    Took it")
-ggsave(img1, filename = "qtrebot1.png", w=6, h=4.5, dpi=255)
+#ggsave(img1, filename = "qtrebot1.png", w=6, h=4.5, dpi=255)
+
+img1.1 <- 
+ggplot(qtsot, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
+  geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  theme_bw()+
+  ggtitle("Regulatory Focus Affects \n Decision to Take Either Product")+
+  xlab("Focus Predominance")+
+  ylab("Decision \n Did not Take     -    Took it")
+ggsave(img1.1, filename = "qtrebot1.1.png", w=6, h=4.5, dpi=255)
 
 img2 <- 
 ggplot(qtsubice, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
   geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
   stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
-  facet_wrap(~path)+
   theme_bw()+
-  ggtitle("Ice Cream \n Regulatory Focus Affects Choice \n Endowment Does Not")+
+  ggtitle("Ice Cream & Regulatory Focus")+
   xlab("Focus Predominance")+
   ylab("Decision \n Did not Take     -    Took it")
 ggsave(img2, filename = "qtrebot2.png", w=6, h=4.5, dpi=255)
 
+img2.1 <- 
+  ggplot(qtsubice, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
+  geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  theme_bw()+
+  ggtitle("Ice Cream & Regulatory Focus \n by Endowment")+
+  facet_wrap(~path)+
+  xlab("Focus Predominance")+
+  ylab("Decision \n Did not Take     -    Took it")
+ggsave(img2.1, filename = "qtrebot2.1.png", w=6, h=4.5, dpi=255)
+
+img2.2 <- 
+  ggplot(qtsubice, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
+  geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  theme_bw()+
+  ggtitle("Ice Cream & Regulatory Focus \n by Eater Type")+
+  facet_wrap(~re)+
+  xlab("Focus Predominance")+
+  ylab("Decision \n Did not Take     -    Took it")
+ggsave(img2.2, filename = "qtrebot2.2.png", w=6, h=4.5, dpi=255)
+
+
+
+
 ggplot(qtsubshamp, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
   geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
   stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
-  theme_bw()
+  theme_bw()+
+  ggtitle("Shampoo: Marginal Effect of \n Regulatory Focus on Decision")+
+  xlab("Focus Predominance")+
+  ylab("Decision \n Did not Take     -    Took it")
+#ggsave(img2, filename = "qtrebot2.png", w=6, h=4.5, dpi=255)
 
 ggplot(qtsot, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
   geom_point(color="black", position=position_jitter(h=.01, w=.29)) +

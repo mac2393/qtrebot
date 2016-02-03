@@ -74,6 +74,7 @@ levels(qtsot$gender)   <- c("Male", "Female")         # need to check that this 
 levels(qtsot$dec)      <- c("Left", "Took")           # need to check that this is the order
 levels(qtsot$product)  <- c("Shampoo", "Ice Cream")   # need to check that this is the order
 levels(qtsot$path)     <- c("endowed", "unendowed")   # need to check that this is the order
+levels(qtsot$re)       <- c("Normal Eater", "Restrained Eater")
 
 qtsot$dec1  <- qtsot$dec
 levels(qtsot$dec1)  <- c(0,1)
