@@ -8,11 +8,9 @@ summary(glmer1)  # Model failed to converge with max|grad| = 0.00974085 (tol = 0
 library(effects)
 plot(allEffects(glmer1))
 
-glmer1.0 <- glmer(dec ~ avgbot + path + ( product | subj), data=qtsot, family=binomial)
+glmer1.0 <- glmer(dec ~ avgbot.z + path + ( product | subj), data=qtsot, family=binomial)
 summary(glmer1.0)  # this model does not fail to converge
 plot(allEffects(glmer1.0))
-
-glmer
 
 glmer1.1 <- glmer(dec ~ avgbot + product + (product|subj), data=qtsot, family=binomial)
 summary(glmer1.1)
@@ -69,6 +67,35 @@ summary(glmer1.4i)
 glmer2.1 <- glmer(dec ~ req + gender + (1|subj), data=qtsot, family=binomial)
 summary(glmer2)
 plot(allEffects(glmer2.1))
+
+#######
+glm1 <- glm(dec ~ avgbot * path, data=qtsubice, family=binomial)
+summary(glm1)
+plot(allEffects(glm1))
+
+glm2 <- glm(dec ~ avgbot + path, data=qtsubice, family=binomial)
+summary(glm2)
+plot(allEffects(glm2))
+
+glm3 <- glm(dec ~ avgbot + path, data=qtsubshamp, family=binomial)
+summary(glm3)
+plot(allEffects(glm3))
+
+glm4 <- glm(dec ~ avgbot + req, data=qtsubice, family=binomial)
+summary(glm4)
+plot(allEffects(glm4))
+
+glm4i <- glm(dec ~ avgbot * req, data=qtsubice, family=binomial)
+summary(glm4i)
+plot(allEffects(glm4i))
+
+glm5 <- glm(dec ~ path, data=qtsubice, family=binomial)
+summary(glm5)
+plot(allEffects(glm5))
+
+glm6 <- glm(dec ~ path, data=qtsubshamp, family=binomial)
+summary(glm6)
+plot(allEffects(glm6))
 
 ###### Linear Mixed Models  ####
 # not working right now # Jan 31st

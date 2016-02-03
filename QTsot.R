@@ -64,9 +64,14 @@ str(avgpp)
 str(aspect)     # looks good
 
 ###### naming levels of factor
+str(qtsot$gender)
+str(qtsot$path)
+qtsot$path <- as.factor(qtsot$path)
+str(qtsot$product)
+str(qtsot$dec)
 
 levels(qtsot$gender)   <- c("Male", "Female")         # need to check that this is the order
-levels(qtsot$dec)      <- c("Took", "Left")           # need to check that this is the order
+levels(qtsot$dec)      <- c("Left", "Took")           # need to check that this is the order
 levels(qtsot$product)  <- c("Shampoo", "Ice Cream")   # need to check that this is the order
 levels(qtsot$path)     <- c("endowed", "unendowed")   # need to check that this is the order
 
@@ -86,5 +91,9 @@ sd(qtsot$avgbot)
 mean(qtsot$avgsmrd)
 sd(qtsot$avgsmrd)
 summary(qtsot$sot)
+
+#### make subsets #####
+qtsubice <- subset(qtsot, product=="Ice Cream")
+qtsubshamp <- subset(qtsot, product=="Shampoo")
 
 
