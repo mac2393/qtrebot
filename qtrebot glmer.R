@@ -11,7 +11,7 @@ summary(glmer1)
 plot(allEffects(glmer1))
 
 # Focus (measured by avgbotA) predicts*** decision for either product.  Endow does not. 
-glmer1.0 <- glmer(dec ~ avgbot + path + ( product | subj), data=qtsot, family=binomial)
+glmer1.0 <- glmer(dec ~ avgbot+ ( product | subj), data=qtsot, family=binomial)
 summary(glmer1.0)  # both products are in this model, so using avgbot for both
 plot(allEffects(glmer1.0))
 
@@ -21,7 +21,7 @@ glmer1.01 <- glmer(dec ~ avgbot + path + req + (product|subj), data=qtsot, famil
 summary(glmer1.01)
 
 # Orthogonal: What a person decides about IC is predicted* by Focus predom taken from Shampoo thoughts!
-glm0 <- glm(dec ~ avgbotA, data=qtsubice, family=binomial)
+glm0 <- glm(dec ~ avgbot, data=qtsubice, family=binomial)
 summary(glm0)
 plot(allEffects(glm0))
 
@@ -46,9 +46,18 @@ summary(glm0.4)
 plot(allEffects(glm0.4))
 
 # REQ does not predict the Shampoo decision - good.  It's working. 
-glm0.41 <- glm(dec ~ req, data=qtsubshamp, family=binomial)
+glm0.41 <- glm(dec ~ avgbot, data=qtsubshamp, family=binomial)
 summary(glm0.41)
 plot(allEffects(glm0.41))
+
+glm0.45 <- glm(dec ~ avgbot + product, data=qtsot, family=binomial)
+summary(glm0.45)
+plot(allEffects(glm0.45))
+
+glm0.42 <- glm(dec ~ req, data=qtsot, family=binomial)
+summary(glm0.42)
+plot(allEffects(glm0.42))
+
 
 # REQ signficant, endow is NOT
 glm0.5 <- glm(dec ~ req + path, data=qtsubice, family=binomial)
@@ -169,7 +178,7 @@ summary(glm5.1)
 plot(allEffects(glm5.1))
 
 # Endowment does not predict the taking of 1 or the other. (using whole dataframe)
-glm6 <- glm(dec ~ path, data=qtsot, family=binomial)
+glm6 <- glm(dec ~ avgbot, data=qtsot, family=binomial)
 summary(glm6)
 plot(allEffects(glm6))
 
@@ -183,3 +192,6 @@ lme2  <- lmer(avgbot ~ path   + (subj|product), data=qtsot)
 summary(lme2)
 
 #aggregate(qt, by=product, FUN=mean)
+
+summary(lmer(path ~ avgbot + (subj|product), data=qtsot))
+summary(lmer(avgbot ~ path + (subj|product), data=qtsot))

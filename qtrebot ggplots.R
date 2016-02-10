@@ -5,7 +5,7 @@ library(ggplot2)
 img1 <- 
 ggplot(qtsot, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
   geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
-  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T, alpha=.9)+
   facet_grid(~product)+
   theme_bw()+
   ggtitle("Regulatory Focus Affects \n Decision to Take the Product")+
@@ -22,6 +22,19 @@ ggplot(qtsot, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
   xlab("Focus Predominance")+
   ylab("Decision \n Did not Take     -    Took it")
 ggsave(img1.1, filename = "qtrebot1.1.png", w=6, h=4.5, dpi=255)
+
+img1.11 <- 
+ggplot(qtsot, aes(x=req.z, y=as.numeric(dec1)-1))+
+  geom_point(color="gray3", position=position_jitter(h=.01, w=.29)) +
+  stat_smooth(size=1.2, method="glm", family="binomial", se=T)+
+  facet_grid(~product)+
+  theme_bw()+
+  ggtitle("REQ Predicts Decision \n to Take Ice Cream, not Shampoo")+
+  xlab("Restrained Eater Questionnaire")+
+  ylab("Decision \n Did not Take     -    Took it")
+ggsave(img1.11, filename = "qtrebot1.11.png", w=6, h=4.5, dpi=255)
+
+
 
 img2 <- 
 ggplot(qtsubice, aes(x=avgbot.z, y=as.numeric(dec1)-1))+
@@ -143,7 +156,7 @@ ggplot(qtsot, aes(dec, avgbot))+ geom_point(position=position_jitter(w=.19, h=.0
   facet_wrap(~re)+
   theme_bw()
 
-ggplot(qtsot, aes(req, dec))+ 
+ggplot(qtsot, aes(req, dec1))+ 
   geom_point(position=position_jitter(w=.19, h=.001))+
   geom_smooth(method="glm", family="binomial")+
   facet_wrap(~path)+
