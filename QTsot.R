@@ -1,6 +1,13 @@
 qtsot <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 #qtsotraw <- read.csv("RF_Coded_11.10.csv", header=TRUE)
 
+# need to make a df of advantages to take the product and another df of "disadvantes"
+
+# then need to sum the Prom and Prev thoughts within adv and disadv
+
+# also need to break apart the predominance score to see where the action is. 
+
+
 options(digits=3)
 
 library(reshape2)
@@ -98,3 +105,32 @@ qtsubshamp <- subset(qtsot, product=="Shampoo")
 
 # I want for each participant, the avgbot for A only. 
 
+# trying to replace that mediation analysis with the right stat test. 
+
+plot(qtsubice$path, qtsubice$dec)
+plot(qtsubice$re, qtsubice$dec)
+plot(qtsubice$req, qtsubice$dec)
+plot(qtsubice$req.z, qtsubice$dec)
+
+attach(qtsubice)
+re
+qtsubicere1 <- subset(qtsubice, qtsubice$re=="Restrained Eater")
+attach(qtsubicere1)
+summary(dec)
+summary(path)
+
+matrix1 <- matrix(c(58,49,53,49),byrow=TRUE,nrow=2)
+#dimnames(matrix1) <- list(path==c("endowed","unendowed"), dec==c("Left","Took"))
+matrix1
+chisq.test(matrix1)
+chisq.test(matrix1,simulate.p.value=TRUE,B=10000)
+# this might be telling us with great certainty that 
+# there is no effect of endowment on the decision to take the IC or not
+# lets check it for REs
+matrix2 <- matrix(c(35, 16, 27,24), byrow=TRUE, nrow=2)
+matrix2
+
+chisq.test(matrix2)
+chisq.test(matrix2, simulate.p.value=TRUE, B=10000)
+plot(matrix1, ylim=c(0,100))
+plot(matrix2, ylim=c(0,100))
